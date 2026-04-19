@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% set progress = progress %}
+{% block title %}Quiz — Question {{ question_num }} — Not Quite{% endblock %}
+{% block content %}
+<div class="mb-2 d-flex justify-content-between align-items-center">
+  <span class="label-pill" style="margin-bottom:0;">Quiz — Question {{ question_num }} of {{ total }}</span>
+  <span class="text-muted" style="font-size:.8rem;">{{ progress }}% complete</span>
+</div>
+
+<div class="card-main">
+  <div style="background:#FDECEA;border-left:4px solid var(--wrong);border-radius:8px;padding:.9rem 1.1rem;margin-bottom:1rem;">
+    <span style="font-size:1.1rem;">✕</span>
+    <span class="wrong-badge"> Not quite. You chose: <em>{{ explanation.get('chosen', chosen) }}</em></span>
+  </div>
+
+  <div class="thought-bubble">💭 {{ question.scenario }}</div>
+
+  {% if explanation %}
+  <div class="mt-3">
+    <p class="section-heading">Why not {{ explanation.chosen }}?</p>
+    <p style="font-size:.9rem;">{{ explanation.why_not }}</p>
+  </div>
+  {% endif %}
+
+  <div class="mt-3" style="background:#EAF5EE;border-left:4px solid var(--correct);border-radius:8px;padding:1rem 1.25rem;">
+    <div style="font-size:.75rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--correct);margin-bottom:.3rem;">✓ Correct Answer:</div>
+    <div style="font-size:1.1rem;font-weight:800;color:var(--correct);">{{ question.answer_name }}</div>
+    <p style="font-size:.9rem;margin-top:.5rem;margin-bottom:0;">{{ question.correct_why }}</p>
+  </div>
+
+  <div class="mt-4 d-flex justify-content-between">
+    <a href="{{ url_for('quiz', question_num=question_num) }}" class="btn-secondary-custom">&larr; Try Again</a>
+    {% if question_num < total %}
+      <a href="{{ url_for('quiz', question_num=question_num+1) }}" class="btn-primary-custom">CONTINUE &rarr;</a>
+    {% else %}
+      <a href="{{ url_for('results') }}" class="btn-primary-custom">SEE RESULTS &rarr;</a>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}
