@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% block title %}Home — Cognitive Distortions{% endblock %}
+{% block content %}
+<div class="card-main mt-2">
+  <div class="row align-items-center">
+    <div class="col-md-7">
+      <div class="label-pill">Mental Health · 10 min</div>
+      <h1 style="font-size:2rem; font-weight:800; color:var(--primary); line-height:1.2;">
+        Do You Know Your<br>Cognitive Distortions?
+      </h1>
+      <p class="text-muted mt-2" style="font-size:.95rem;">
+        A 10-minute interactive lesson for when your thoughts feel overwhelming.
+      </p>
+
+      <div class="mt-4 mb-3">
+        <div class="d-flex align-items-start gap-2 mb-2">
+          <span style="background:var(--accent);color:#fff;border-radius:50%;width:26px;height:26px;display:flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:700;flex-shrink:0;">A</span>
+          <span style="font-size:.9rem;">Learn each distortion with a real example and reframe</span>
+        </div>
+        <div class="d-flex align-items-start gap-2 mb-2">
+          <span style="background:var(--accent);color:#fff;border-radius:50%;width:26px;height:26px;display:flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:700;flex-shrink:0;">B</span>
+          <span style="font-size:.9rem;">Practice spotting distortions — then reveal the answer</span>
+        </div>
+        <div class="d-flex align-items-start gap-2 mb-2">
+          <span style="background:var(--accent);color:#fff;border-radius:50%;width:26px;height:26px;display:flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:700;flex-shrink:0;">C</span>
+          <span style="font-size:.9rem;">Take a cold quiz and see your score</span>
+        </div>
+      </div>
+
+      <a href="{{ url_for('start') }}" class="btn-primary-custom mt-2">START LEARNING &rarr;</a>
+    </div>
+
+    <div class="col-md-5 mt-4 mt-md-0">
+      <div style="background:var(--light-bg); border-radius:10px; padding:1.25rem;">
+        <p class="section-heading">You'll learn to recognize</p>
+        <div class="mb-2 p-2" style="background:#fff;border-radius:7px;border-left:3px solid #4A6FA5;">
+          <strong style="font-size:.9rem;">All-or-Nothing Thinking</strong><br>
+          <span class="text-muted" style="font-size:.8rem;">Extreme binary judgments</span>
+        </div>
+        <div class="mb-2 p-2" style="background:#fff;border-radius:7px;border-left:3px solid #6C8EBF;">
+          <strong style="font-size:.9rem;">Catastrophizing</strong><br>
+          <span class="text-muted" style="font-size:.8rem;">Worst-case spirals</span>
+        </div>
+        <div class="p-2" style="background:#fff;border-radius:7px;border-left:3px solid #9AB4D6;">
+          <strong style="font-size:.9rem;">Mind Reading</strong><br>
+          <span class="text-muted" style="font-size:.8rem;">Assuming others' thoughts</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

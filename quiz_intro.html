@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block title %}Quiz — Time to Test Yourself{% endblock %}
+{% block content %}
+<div class="card-main text-center mt-2">
+  <div style="font-size:2.5rem;margin-bottom:.5rem;">🧠</div>
+  <h2 style="font-size:1.6rem;font-weight:800;color:var(--primary);">Time to Test Yourself</h2>
+  <p class="text-muted mt-2" style="font-size:.95rem;">
+    You'll be provided with three cold scenarios.<br>No definitions visible. No hints. Please choose on your own.
+  </p>
+
+  <div class="mt-4 mb-4" style="text-align:left;max-width:380px;margin-left:auto;margin-right:auto;">
+    <div class="d-flex align-items-center gap-3 mb-2">
+      <span style="font-size:1.3rem;">📋</span>
+      <span style="font-size:.9rem;">Three questions — one per distortion</span>
+    </div>
+    <div class="d-flex align-items-center gap-3 mb-2">
+      <span style="font-size:1.3rem;">⏱</span>
+      <span style="font-size:.9rem;">No time pressure — think carefully!</span>
+    </div>
+    <div class="d-flex align-items-center gap-3">
+      <span style="font-size:1.3rem;">🏆</span>
+      <span style="font-size:.9rem;">View your score at the end</span>
+    </div>
+  </div>
+
+  <a href="{{ url_for('quiz', question_num=1) }}" class="btn-primary-custom">BEGIN QUIZ &rarr;</a>
+</div>
+{% endblock %}

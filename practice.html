@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% set progress = progress %}
+{% block title %}Practice {{ practice_num }} of {{ total }}{% endblock %}
+{% block content %}
+<div class="mb-2 d-flex justify-content-between align-items-center">
+  <span class="label-pill" style="margin-bottom:0;">Practice {{ practice_num }} of {{ total }}</span>
+  <span class="text-muted" style="font-size:.8rem;">{{ progress }}% complete</span>
+</div>
+
+<div class="card-main">
+  <p style="font-size:.85rem;color:var(--muted);">✦ Choose your answer — then advance to see the reveal</p>
+
+  <div class="thought-bubble">💭 {{ practice.scenario }}</div>
+
+  <p class="section-heading mt-3">Choose the distortion:</p>
+
+  <div id="options">
+    {% for opt in options %}
+    <label class="answer-option" id="opt-{{ opt.label }}">
+      <input type="radio" name="answer" value="{{ opt.label }}" onchange="selectOpt('{{ opt.label }}')"/>
+      <span style="font-weight:700;color:var(--primary);min-width:20px;">{{ opt.label }}</span>
+      <span>{{ opt.text }}</span>
+    </label>
+    {% endfor %}
+  </div>
+
+  <div class="mt-4 d-flex justify-content-between">
+    {% if practice_num > 1 %}
+      <a href="{{ url_for('practice', practice_num=practice_num-1) }}" class="btn-secondary-custom">&larr; Back</a>
+    {% else %}
+      <a href="{{ url_for('learn', lesson_num=3) }}" class="btn-secondary-custom">&larr; Back</a>
+    {% endif %}
+    <a href="{{ url_for('practice_reveal', practice_num=practice_num) }}" class="btn-primary-custom" id="reveal-btn">SEE ANSWER &rarr;</a>
+  </div>
+</div>
+{% endblock %}
+{% block scripts %}
+<script>
+function selectOpt(label) {
+  $('.answer-option').removeClass('selected');
+  $('#opt-' + label).addClass('selected');
+}
+</script>
+{% endblock %}

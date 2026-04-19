@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% set progress = progress %}
+{% block title %}Quiz — Question {{ question_num }} of {{ total }}{% endblock %}
+{% block content %}
+<div class="mb-2 d-flex justify-content-between align-items-center">
+  <span class="label-pill" style="margin-bottom:0;">Quiz — Question {{ question_num }} of {{ total }}</span>
+  <span class="text-muted" style="font-size:.8rem;">{{ progress }}% complete</span>
+</div>
+
+<div class="card-main">
+  <p style="font-size:.9rem;color:var(--muted);">Read the thought scenario. Choose the cognitive distortion it best represents.</p>
+
+  <div class="thought-bubble">💭 {{ question.scenario }}</div>
+
+  <p class="section-heading mt-3">Select the distortion:</p>
+
+  <form method="POST" action="{{ url_for('quiz_submit', question_num=question_num) }}" id="quiz-form">
+    {% for opt in question.options %}
+    <label class="answer-option" id="opt-{{ opt.label }}">
+      <input type="radio" name="answer" value="{{ opt.label }}" required onchange="selectOpt('{{ opt.label }}')"/>
+      <span style="font-weight:700;color:var(--primary);min-width:20px;">{{ opt.label }}</span>
+      <span>{{ opt.text }}</span>
+    </label>
+    {% endfor %}
+
+    <div class="mt-4 d-flex justify-content-end">
+      <button type="submit" class="btn-primary-custom">SUBMIT &rarr;</button>
+    </div>
+  </form>
+</div>
+{% endblock %}
+{% block scripts %}
+<script>
+function selectOpt(label) {
+  $('.answer-option').removeClass('selected');
+  $('#opt-' + label).addClass('selected');
+}
+</script>
+{% endblock %}
