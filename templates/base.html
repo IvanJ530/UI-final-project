@@ -125,6 +125,26 @@
     .wrong-badge { color: var(--wrong); font-weight: 700; }
     .result-big { font-size: 3.5rem; font-weight: 800; color: var(--primary); }
     footer { color: var(--muted); font-size: .8rem; padding: 2rem 0 1rem; text-align: center; }
+
+    .lesson-index { list-style: none; padding: 0; margin: 0; }
+    .lesson-index li { position: relative; padding: .65rem .9rem .65rem 2.6rem; border-radius: 8px; margin-bottom: .35rem; font-size: .85rem; color: var(--muted); transition: background .15s, color .15s; }
+    .lesson-index li a { text-decoration: none; color: inherit; display: block; }
+    .lesson-index li::before {
+      content: attr(data-step);
+      position: absolute; left: .75rem; top: 50%; transform: translateY(-50%);
+      width: 22px; height: 22px; border-radius: 50%;
+      background: #dce4f0; color: var(--muted);
+      display: flex; align-items: center; justify-content: center;
+      font-size: .7rem; font-weight: 700;
+    }
+    .lesson-index li.active { background: #eef2fa; color: var(--primary); font-weight: 600; }
+    .lesson-index li.active::before { background: var(--primary); color: #fff; }
+    .lesson-index li:hover:not(.active) { background: #f4f6fb; color: var(--text); cursor: pointer; }
+    .index-divider { border: none; border-top: 1px solid #e8ecf3; margin: .6rem 0; }
+    .lesson-index li.done { color: var(--correct); }
+    .lesson-index li.done::before { background: var(--correct); color: #fff; content: '\2713'; }
+    .lesson-index li.wrong { color: var(--wrong); }
+    .lesson-index li.wrong::before { background: var(--wrong); color: #fff; content: '\2717'; }
   </style>
   {% block head %}{% endblock %}
 </head>
@@ -144,7 +164,7 @@
 </div>
 {% endif %}
 
-<div class="container py-4" style="max-width:760px;">
+<div class="container-fluid py-4" style="max-width:1400px; padding-left:3rem; padding-right:3rem;">
   {% block content %}{% endblock %}
 </div>
 

@@ -7,30 +7,58 @@
   <span class="text-muted" style="font-size:.8rem;">{{ progress }}% complete</span>
 </div>
 
-<div class="card-main">
-  <p style="font-size:.85rem;color:var(--muted);">✦ Choose your answer — then advance to see the reveal</p>
-
-  <div class="thought-bubble">💭 {{ practice.scenario }}</div>
-
-  <p class="section-heading mt-3">Choose the distortion:</p>
-
-  <div id="options">
-    {% for opt in options %}
-    <label class="answer-option" id="opt-{{ opt.label }}">
-      <input type="radio" name="answer" value="{{ opt.label }}" onchange="selectOpt('{{ opt.label }}')"/>
-      <span style="font-weight:700;color:var(--primary);min-width:20px;">{{ opt.label }}</span>
-      <span>{{ opt.text }}</span>
-    </label>
-    {% endfor %}
+<div class="row gx-4">
+  <!-- Index Sidebar -->
+  <div class="col-md-3">
+    <div style="background:#fff;border-radius:10px;padding:1rem;box-shadow:0 1px 6px rgba(44,62,122,.07);position:sticky;top:1rem;">
+      <p class="section-heading" style="margin-bottom:.6rem;">Learn</p>
+      <ul class="lesson-index">
+        {% for l in all_lessons %}
+        <li data-step="{{ l.id }}">
+          <a href="{{ url_for('learn', lesson_num=l.id) }}">{{ l.name }}</a>
+        </li>
+        {% endfor %}
+      </ul>
+      <hr class="index-divider">
+      <p class="section-heading" style="margin-bottom:.6rem;">Practice</p>
+      <ul class="lesson-index">
+        {% for p in all_practice %}
+        <li data-step="{{ p.id }}" class="{% if p.id == practice_num %}active{% endif %}">
+          <a href="{{ url_for('practice', practice_num=p.id) }}">{{ p.answer_name }}</a>
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
   </div>
 
-  <div class="mt-4 d-flex justify-content-between">
-    {% if practice_num > 1 %}
-      <a href="{{ url_for('practice', practice_num=practice_num-1) }}" class="btn-secondary-custom">&larr; Back</a>
-    {% else %}
-      <a href="{{ url_for('learn', lesson_num=3) }}" class="btn-secondary-custom">&larr; Back</a>
-    {% endif %}
-    <a href="{{ url_for('practice_reveal', practice_num=practice_num) }}" class="btn-primary-custom" id="reveal-btn">SEE ANSWER &rarr;</a>
+  <!-- Practice Content -->
+  <div class="col-md-9">
+    <div class="card-main">
+      <p style="font-size:.85rem;color:var(--muted);">Choose your answer — then advance to see the reveal</p>
+
+      <div class="thought-bubble">{{ practice.scenario }}</div>
+
+      <p class="section-heading mt-3">Choose the distortion:</p>
+
+      <div id="options">
+        {% for opt in options %}
+        <label class="answer-option" id="opt-{{ opt.label }}">
+          <input type="radio" name="answer" value="{{ opt.label }}" onchange="selectOpt('{{ opt.label }}')"/>
+          <span style="font-weight:700;color:var(--primary);min-width:20px;">{{ opt.label }}</span>
+          <span>{{ opt.text }}</span>
+        </label>
+        {% endfor %}
+      </div>
+
+      <div class="mt-4 d-flex justify-content-between">
+        {% if practice_num > 1 %}
+          <a href="{{ url_for('practice', practice_num=practice_num-1) }}" class="btn-secondary-custom">&larr; Back</a>
+        {% else %}
+          <a href="{{ url_for('learn', lesson_num=3) }}" class="btn-secondary-custom">&larr; Back</a>
+        {% endif %}
+        <a href="{{ url_for('practice_reveal', practice_num=practice_num) }}" class="btn-primary-custom" id="reveal-btn">SEE ANSWER &rarr;</a>
+      </div>
+    </div>
   </div>
 </div>
 {% endblock %}
