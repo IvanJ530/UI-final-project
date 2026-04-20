@@ -144,6 +144,15 @@ def init_session():
     if 'quiz_score' not in session:
         session['quiz_score'] = 0
 
+def get_quiz_resume():
+    answers = session.get('quiz_answers', {})
+    if not answers:
+        return None
+    for i in range(1, len(QUIZ_QUESTIONS) + 1):
+        if str(i) not in answers:
+            return i
+    return None
+
 # ── Routes ────────────────────────────────────────────────────────────────────
 
 @app.route('/')
@@ -179,7 +188,10 @@ def learn(lesson_num):
                            lesson=lesson,
                            lesson_num=lesson_num,
                            total=total_lessons,
-                           progress=progress)
+                           progress=progress,
+                           all_lessons=LESSONS,
+                           all_practice=PRACTICE,
+                           quiz_resume=get_quiz_resume())
 
 @app.route('/practice/<int:practice_num>')
 def practice(practice_num):
@@ -195,6 +207,9 @@ def practice(practice_num):
                            practice_num=practice_num,
                            total=len(PRACTICE),
                            progress=progress,
+                           all_lessons=LESSONS,
+                           all_practice=PRACTICE,
+                           quiz_resume=get_quiz_resume(),
                            options=[
                                {"label": "A", "text": "All-or-Nothing Thinking"},
                                {"label": "B", "text": "Catastrophizing"},
@@ -212,11 +227,17 @@ def practice_reveal(practice_num):
                            practice=p,
                            practice_num=practice_num,
                            total=len(PRACTICE),
-                           progress=progress)
+                           progress=progress,
+                           all_lessons=LESSONS,
+                           all_practice=PRACTICE,
+                           quiz_resume=get_quiz_resume())
 
 @app.route('/quiz_intro')
 def quiz_intro():
     init_session()
+    resume = get_quiz_resume()
+    if resume:
+        return redirect(url_for('quiz', question_num=resume))
     return render_template('quiz_intro.html')
 
 @app.route('/quiz/<int:question_num>', methods=['GET'])
@@ -230,7 +251,9 @@ def quiz(question_num):
                            question=q,
                            question_num=question_num,
                            total=len(QUIZ_QUESTIONS),
-                           progress=progress)
+                           progress=progress,
+                           all_quiz=QUIZ_QUESTIONS,
+                           quiz_answers=session.get('quiz_answers', {}))
 
 @app.route('/quiz/<int:question_num>/submit', methods=['POST'])
 def quiz_submit(question_num):
@@ -261,7 +284,9 @@ def quiz_submit(question_num):
                                total=len(QUIZ_QUESTIONS),
                                chosen=chosen,
                                explanation=explanation,
-                               progress=round((question_num / len(QUIZ_QUESTIONS)) * 100))
+                               progress=round((question_num / len(QUIZ_QUESTIONS)) * 100),
+                               all_quiz=QUIZ_QUESTIONS,
+                               quiz_answers=session.get('quiz_answers', {}))
 
 @app.route('/results')
 def results():

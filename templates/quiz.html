@@ -7,26 +7,46 @@
   <span class="text-muted" style="font-size:.8rem;">{{ progress }}% complete</span>
 </div>
 
-<div class="card-main">
-  <p style="font-size:.9rem;color:var(--muted);">Read the thought scenario. Choose the cognitive distortion it best represents.</p>
-
-  <div class="thought-bubble">💭 {{ question.scenario }}</div>
-
-  <p class="section-heading mt-3">Select the distortion:</p>
-
-  <form method="POST" action="{{ url_for('quiz_submit', question_num=question_num) }}" id="quiz-form">
-    {% for opt in question.options %}
-    <label class="answer-option" id="opt-{{ opt.label }}">
-      <input type="radio" name="answer" value="{{ opt.label }}" required onchange="selectOpt('{{ opt.label }}')"/>
-      <span style="font-weight:700;color:var(--primary);min-width:20px;">{{ opt.label }}</span>
-      <span>{{ opt.text }}</span>
-    </label>
-    {% endfor %}
-
-    <div class="mt-4 d-flex justify-content-end">
-      <button type="submit" class="btn-primary-custom">SUBMIT &rarr;</button>
+<div class="row gx-4">
+  <!-- Quiz Index Sidebar -->
+  <div class="col-md-3">
+    <div style="background:#fff;border-radius:10px;padding:1rem;box-shadow:0 1px 6px rgba(44,62,122,.07);position:sticky;top:1rem;">
+      <p class="section-heading" style="margin-bottom:.6rem;">Quiz Progress</p>
+      <ul class="lesson-index">
+        {% for q in all_quiz %}
+        {% set ans = quiz_answers.get(q.id|string, {}) %}
+        <li data-step="{{ q.id }}" class="{% if q.id == question_num %}active{% elif ans %}{% if ans.correct %}done{% else %}wrong{% endif %}{% endif %}">
+          <a href="{{ url_for('quiz', question_num=q.id) }}">Question {{ q.id }}</a>
+        </li>
+        {% endfor %}
+      </ul>
     </div>
-  </form>
+  </div>
+
+  <!-- Quiz Content -->
+  <div class="col-md-9">
+    <div class="card-main">
+      <p style="font-size:.9rem;color:var(--muted);">Read the thought scenario. Choose the cognitive distortion it best represents.</p>
+
+      <div class="thought-bubble">{{ question.scenario }}</div>
+
+      <p class="section-heading mt-3">Select the distortion:</p>
+
+      <form method="POST" action="{{ url_for('quiz_submit', question_num=question_num) }}" id="quiz-form">
+        {% for opt in question.options %}
+        <label class="answer-option" id="opt-{{ opt.label }}">
+          <input type="radio" name="answer" value="{{ opt.label }}" required onchange="selectOpt('{{ opt.label }}')"/>
+          <span style="font-weight:700;color:var(--primary);min-width:20px;">{{ opt.label }}</span>
+          <span>{{ opt.text }}</span>
+        </label>
+        {% endfor %}
+
+        <div class="mt-4 d-flex justify-content-end">
+          <button type="submit" class="btn-primary-custom">SUBMIT &rarr;</button>
+        </div>
+      </form>
+    </div>
+  </div>
 </div>
 {% endblock %}
 {% block scripts %}

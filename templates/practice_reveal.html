@@ -7,26 +7,58 @@
   <span class="text-muted" style="font-size:.8rem;">{{ progress }}% complete</span>
 </div>
 
-<div class="card-main">
-  <div class="thought-bubble">💭 {{ practice.scenario }}</div>
-
-  <div class="mt-3" style="background:#EAF5EE;border-left:4px solid var(--correct);border-radius:8px;padding:1rem 1.25rem;">
-    <div style="font-size:.75rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--correct);margin-bottom:.3rem;">✓ Correct Answer:</div>
-    <div style="font-size:1.1rem;font-weight:800;color:var(--correct);">{{ practice.answer_name }}</div>
+<div class="row gx-4">
+  <!-- Index Sidebar -->
+  <div class="col-md-3">
+    <div style="background:#fff;border-radius:10px;padding:1rem;box-shadow:0 1px 6px rgba(44,62,122,.07);position:sticky;top:1rem;">
+      <p class="section-heading" style="margin-bottom:.6rem;">Learn</p>
+      <ul class="lesson-index">
+        {% for l in all_lessons %}
+        <li data-step="{{ l.id }}">
+          <a href="{{ url_for('learn', lesson_num=l.id) }}">{{ l.name }}</a>
+        </li>
+        {% endfor %}
+      </ul>
+      <hr class="index-divider">
+      <p class="section-heading" style="margin-bottom:.6rem;">Practice</p>
+      <ul class="lesson-index">
+        {% for p in all_practice %}
+        <li data-step="{{ p.id }}" class="{% if p.id == practice_num %}active{% endif %}">
+          <a href="{{ url_for('practice', practice_num=p.id) }}">{{ p.answer_name }}</a>
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
   </div>
 
-  <div class="mt-3">
-    <p class="section-heading">Why?</p>
-    <p style="font-size:.9rem;">{{ practice.why }}</p>
-  </div>
+  <!-- Reveal Content -->
+  <div class="col-md-9">
+    <div class="card-main">
+      <div class="thought-bubble">{{ practice.scenario }}</div>
 
-  <div class="mt-4 d-flex justify-content-between">
-    <a href="{{ url_for('practice', practice_num=practice_num) }}" class="btn-secondary-custom">&larr; Back</a>
-    {% if practice_num < total %}
-      <a href="{{ url_for('practice', practice_num=practice_num+1) }}" class="btn-primary-custom">NEXT PRACTICE &rarr;</a>
-    {% else %}
-      <a href="{{ url_for('quiz_intro') }}" class="btn-primary-custom">START QUIZ &rarr;</a>
-    {% endif %}
+      <div class="mt-3" style="background:#EAF5EE;border-left:4px solid var(--correct);border-radius:8px;padding:1rem 1.25rem;">
+        <div style="font-size:.75rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--correct);margin-bottom:.3rem;">Correct Answer:</div>
+        <div style="font-size:1.1rem;font-weight:800;color:var(--correct);">{{ practice.answer_name }}</div>
+      </div>
+
+      <div class="mt-3">
+        <p class="section-heading">Why?</p>
+        <p style="font-size:.9rem;">{{ practice.why }}</p>
+      </div>
+
+      <div class="mt-4 d-flex justify-content-between">
+        <a href="{{ url_for('practice', practice_num=practice_num) }}" class="btn-secondary-custom">&larr; Back</a>
+        {% if practice_num < total %}
+          <a href="{{ url_for('practice', practice_num=practice_num+1) }}" class="btn-primary-custom">NEXT PRACTICE &rarr;</a>
+        {% else %}
+          {% if quiz_resume %}
+            <a href="{{ url_for('quiz', question_num=quiz_resume) }}" class="btn-primary-custom">CONTINUE QUIZ &rarr;</a>
+          {% else %}
+            <a href="{{ url_for('quiz_intro') }}" class="btn-primary-custom">START QUIZ &rarr;</a>
+          {% endif %}
+        {% endif %}
+      </div>
+    </div>
   </div>
 </div>
 {% endblock %}

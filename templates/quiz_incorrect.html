@@ -7,34 +7,53 @@
   <span class="text-muted" style="font-size:.8rem;">{{ progress }}% complete</span>
 </div>
 
-<div class="card-main">
-  <div style="background:#FDECEA;border-left:4px solid var(--wrong);border-radius:8px;padding:.9rem 1.1rem;margin-bottom:1rem;">
-    <span style="font-size:1.1rem;">✕</span>
-    <span class="wrong-badge"> Not quite. You chose: <em>{{ explanation.get('chosen', chosen) }}</em></span>
+<div class="row gx-4">
+  <!-- Quiz Index Sidebar -->
+  <div class="col-md-3">
+    <div style="background:#fff;border-radius:10px;padding:1rem;box-shadow:0 1px 6px rgba(44,62,122,.07);position:sticky;top:1rem;">
+      <p class="section-heading" style="margin-bottom:.6rem;">Quiz Progress</p>
+      <ul class="lesson-index">
+        {% for q in all_quiz %}
+        {% set ans = quiz_answers.get(q.id|string, {}) %}
+        <li data-step="{{ q.id }}" class="{% if q.id == question_num %}active{% elif ans %}{% if ans.correct %}done{% else %}wrong{% endif %}{% endif %}">
+          <a href="{{ url_for('quiz', question_num=q.id) }}">Question {{ q.id }}</a>
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
   </div>
 
-  <div class="thought-bubble">💭 {{ question.scenario }}</div>
+  <!-- Incorrect Content -->
+  <div class="col-md-9">
+    <div class="card-main">
+      <div style="background:#FDECEA;border-left:4px solid var(--wrong);border-radius:8px;padding:.9rem 1.1rem;margin-bottom:1rem;">
+        <span class="wrong-badge">Not quite. You chose: <em>{{ explanation.get('chosen', chosen) }}</em></span>
+      </div>
 
-  {% if explanation %}
-  <div class="mt-3">
-    <p class="section-heading">Why not {{ explanation.chosen }}?</p>
-    <p style="font-size:.9rem;">{{ explanation.why_not }}</p>
-  </div>
-  {% endif %}
+      <div class="thought-bubble">{{ question.scenario }}</div>
 
-  <div class="mt-3" style="background:#EAF5EE;border-left:4px solid var(--correct);border-radius:8px;padding:1rem 1.25rem;">
-    <div style="font-size:.75rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--correct);margin-bottom:.3rem;">✓ Correct Answer:</div>
-    <div style="font-size:1.1rem;font-weight:800;color:var(--correct);">{{ question.answer_name }}</div>
-    <p style="font-size:.9rem;margin-top:.5rem;margin-bottom:0;">{{ question.correct_why }}</p>
-  </div>
+      {% if explanation %}
+      <div class="mt-3">
+        <p class="section-heading">Why not {{ explanation.chosen }}?</p>
+        <p style="font-size:.9rem;">{{ explanation.why_not }}</p>
+      </div>
+      {% endif %}
 
-  <div class="mt-4 d-flex justify-content-between">
-    <a href="{{ url_for('quiz', question_num=question_num) }}" class="btn-secondary-custom">&larr; Try Again</a>
-    {% if question_num < total %}
-      <a href="{{ url_for('quiz', question_num=question_num+1) }}" class="btn-primary-custom">CONTINUE &rarr;</a>
-    {% else %}
-      <a href="{{ url_for('results') }}" class="btn-primary-custom">SEE RESULTS &rarr;</a>
-    {% endif %}
+      <div class="mt-3" style="background:#EAF5EE;border-left:4px solid var(--correct);border-radius:8px;padding:1rem 1.25rem;">
+        <div style="font-size:.75rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--correct);margin-bottom:.3rem;">Correct Answer:</div>
+        <div style="font-size:1.1rem;font-weight:800;color:var(--correct);">{{ question.answer_name }}</div>
+        <p style="font-size:.9rem;margin-top:.5rem;margin-bottom:0;">{{ question.correct_why }}</p>
+      </div>
+
+      <div class="mt-4 d-flex justify-content-between">
+        <a href="{{ url_for('quiz', question_num=question_num) }}" class="btn-secondary-custom">&larr; Try Again</a>
+        {% if question_num < total %}
+          <a href="{{ url_for('quiz', question_num=question_num+1) }}" class="btn-primary-custom">CONTINUE &rarr;</a>
+        {% else %}
+          <a href="{{ url_for('results') }}" class="btn-primary-custom">SEE RESULTS &rarr;</a>
+        {% endif %}
+      </div>
+    </div>
   </div>
 </div>
 {% endblock %}
