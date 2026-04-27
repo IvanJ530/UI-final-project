@@ -37,10 +37,27 @@
       <div class="content-body">
         <div class="thought-bubble">{{ practice.scenario }}</div>
 
+        {% if user_chosen %}
+          {% if user_correct %}
+        <div class="feedback-correct mt-s2">
+          <div class="feedback-label correct-badge">Your Answer: {{ user_chosen_name }}</div>
+          <div class="feedback-answer correct-badge">Correct!</div>
+        </div>
+          {% else %}
+        <div class="feedback-wrong mt-s2">
+          <span class="wrong-badge">You chose: {{ user_chosen_name }}</span>
+        </div>
         <div class="feedback-correct mt-s2">
           <div class="feedback-label correct-badge">Correct Answer:</div>
           <div class="feedback-answer correct-badge">{{ practice.answer_name }}</div>
         </div>
+          {% endif %}
+        {% else %}
+        <div class="feedback-correct mt-s2">
+          <div class="feedback-label correct-badge">Correct Answer:</div>
+          <div class="feedback-answer correct-badge">{{ practice.answer_name }}</div>
+        </div>
+        {% endif %}
 
         <div class="mt-s2">
           <p class="section-heading">Why?</p>
