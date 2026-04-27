@@ -1,40 +1,40 @@
 {% extends "base.html" %}
 {% block title %}Your Results{% endblock %}
 {% block content %}
-<div class="card-main mt-2">
-  <div class="text-center mb-4">
+<div class="card-main mt-s2" style="max-width:680px;margin-left:auto;margin-right:auto;">
+  <div class="text-center mb-s3">
     <div class="result-big">{{ score }}/{{ total }}</div>
-    <div style="font-size:1rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;">Correct</div>
+    <div class="section-heading mt-s1">Correct</div>
     {% if score == total %}
-      <div style="font-size:1.15rem;font-weight:700;color:var(--correct);margin-top:.5rem;">Great work! 🎉</div>
-      <p class="text-muted" style="font-size:.9rem;">You correctly identified all three distortions.</p>
+      <div style="font-size:var(--text-lg);font-weight:700;color:var(--correct);margin-top:var(--s1);">Great work! 🎉</div>
+      <p class="muted-text">You correctly identified all three distortions.</p>
     {% elif score >= 2 %}
-      <div style="font-size:1.1rem;font-weight:700;color:#7A5C00;margin-top:.5rem;">Good effort! 💪</div>
-      <p class="text-muted" style="font-size:.9rem;">Almost there — review the recap below for the one you missed.</p>
+      <div style="font-size:var(--text-lg);font-weight:700;color:#7A5C00;margin-top:var(--s1);">Good effort! 💪</div>
+      <p class="muted-text">Almost there — review the recap below for the one you missed.</p>
     {% else %}
-      <div style="font-size:1.1rem;font-weight:700;color:var(--wrong);margin-top:.5rem;">Keep practicing!</div>
-      <p class="text-muted" style="font-size:.9rem;">Review the recap and try again when you're ready.</p>
+      <div style="font-size:var(--text-lg);font-weight:700;color:var(--wrong);margin-top:var(--s1);">Keep practicing!</div>
+      <p class="muted-text">Review the recap and try again when you're ready.</p>
     {% endif %}
   </div>
 
   <p class="section-heading">Here's a recap:</p>
 
   {% for item in recap %}
-  <div class="mb-3 p-3" style="border:2px solid {% if item.user_correct %}#C8E6C9{% else %}#FFCDD2{% endif %};border-radius:9px;background:{% if item.user_correct %}#F1F8E9{% else %}#FFF5F5{% endif %};">
-    <div class="d-flex justify-content-between align-items-center mb-1">
-      <span style="font-size:.75rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;">Q{{ item.num }}</span>
+  <div class="mb-s2" style="border:2px solid {% if item.user_correct %}#C8E6C9{% else %}#FFCDD2{% endif %};border-radius:8px;padding:var(--s2);background:{% if item.user_correct %}#F1F8E9{% else %}#FFF5F5{% endif %};">
+    <div class="d-flex justify-content-between align-items-center mb-s1">
+      <span class="section-heading" style="margin-bottom:0;">Q{{ item.num }}</span>
       {% if item.user_correct %}
-        <span style="font-size:.75rem;font-weight:700;color:var(--correct);">✓ Correct</span>
+        <span class="correct-badge" style="font-size:var(--text-xs);">✓ Correct</span>
       {% else %}
-        <span style="font-size:.75rem;font-weight:700;color:var(--wrong);">✕ Incorrect</span>
+        <span class="wrong-badge" style="font-size:var(--text-xs);">✕ Incorrect</span>
       {% endif %}
     </div>
-    <div style="font-weight:800;font-size:.95rem;color:var(--primary);">{{ item.answer_name }}</div>
-    <p style="font-size:.82rem;color:var(--text);margin-top:.35rem;margin-bottom:0;">{{ item.correct_why }}</p>
+    <div style="font-weight:800;font-size:var(--text-base);color:var(--base);">{{ item.answer_name }}</div>
+    <p class="body-text" style="margin-top:var(--s1);margin-bottom:0;">{{ item.correct_why }}</p>
   </div>
   {% endfor %}
 
-  <div class="mt-4 d-flex justify-content-between">
+  <div class="mt-s4 d-flex justify-content-between">
     <a href="{{ url_for('learn', lesson_num=1) }}" class="btn-secondary-custom">Review Distortions Again</a>
     <a href="{{ url_for('home') }}" class="btn-primary-custom">Home</a>
   </div>
