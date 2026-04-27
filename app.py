@@ -158,18 +158,16 @@ def get_quiz_resume():
 @app.route('/')
 def home():
     init_session()
-    session['started'] = False
-    session['learn_log'] = {}
-    session['practice_log'] = {}
-    session['quiz_answers'] = {}
-    session['quiz_score'] = 0
-    session.modified = True
     return render_template('home.html')
 
 @app.route('/start')
 def start():
     session['started'] = True
     session['start_time'] = datetime.now().isoformat()
+    session['learn_log'] = {}
+    session['practice_log'] = {}
+    session['quiz_answers'] = {}
+    session['quiz_score'] = 0
     session.modified = True
     return redirect(url_for('learn', lesson_num=1))
 
@@ -216,13 +214,30 @@ def practice(practice_num):
                                {"label": "C", "text": "Mind Reading"}
                            ])
 
-@app.route('/practice/<int:practice_num>/reveal')
+@app.route('/practice/<int:practice_num>/reveal', methods=['GET', 'POST'])
 def practice_reveal(practice_num):
     init_session()
     if practice_num < 1 or practice_num > len(PRACTICE):
         return redirect(url_for('home'))
     p = PRACTICE[practice_num - 1]
     progress = 33 + round((practice_num / len(PRACTICE)) * 33)
+
+    if request.method == 'POST':
+        chosen = request.form.get('answer', '')
+        session['practice_log'][str(practice_num)] = {
+            'entered': datetime.now().isoformat(),
+            'chosen': chosen,
+            'correct': chosen == p['answer']
+        }
+        session.modified = True
+
+    log_entry = session.get('practice_log', {}).get(str(practice_num), {})
+    user_chosen = log_entry.get('chosen')
+    user_correct = log_entry.get('correct')
+
+    answer_names = {"A": "All-or-Nothing Thinking", "B": "Catastrophizing", "C": "Mind Reading"}
+    user_chosen_name = answer_names.get(user_chosen)
+
     return render_template('practice_reveal.html',
                            practice=p,
                            practice_num=practice_num,
@@ -230,7 +245,10 @@ def practice_reveal(practice_num):
                            progress=progress,
                            all_lessons=LESSONS,
                            all_practice=PRACTICE,
-                           quiz_resume=get_quiz_resume())
+                           quiz_resume=get_quiz_resume(),
+                           user_chosen=user_chosen,
+                           user_chosen_name=user_chosen_name,
+                           user_correct=user_correct)
 
 @app.route('/quiz_intro')
 def quiz_intro():
@@ -292,6 +310,8 @@ def quiz_submit(question_num):
 def results():
     init_session()
     answers = session.get('quiz_answers', {})
+    if len(answers) < len(QUIZ_QUESTIONS):
+        return redirect(url_for('quiz_intro'))
     score = sum(1 for a in answers.values() if a.get('correct'))
     total = len(QUIZ_QUESTIONS)
     recap = []

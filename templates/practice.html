@@ -41,7 +41,7 @@
 
         <p class="section-heading mt-s2">Choose the distortion:</p>
 
-        <div id="options">
+        <form method="POST" action="{{ url_for('practice_reveal', practice_num=practice_num) }}" id="practice-form">
           {% for opt in options %}
           <label class="answer-option" id="opt-{{ opt.label }}">
             <input type="radio" name="answer" value="{{ opt.label }}" onchange="selectOpt('{{ opt.label }}')"/>
@@ -49,7 +49,7 @@
             <span class="body-text">{{ opt.text }}</span>
           </label>
           {% endfor %}
-        </div>
+        </form>
       </div>
 
       <div class="mt-s4 d-flex justify-content-between">
@@ -58,7 +58,7 @@
         {% else %}
           <a href="{{ url_for('learn', lesson_num=3) }}" class="btn-secondary-custom">&larr; Back</a>
         {% endif %}
-        <a href="{{ url_for('practice_reveal', practice_num=practice_num) }}" class="btn-primary-custom" id="reveal-btn">SEE ANSWER &rarr;</a>
+        <button type="submit" form="practice-form" class="btn-primary-custom" id="reveal-btn">SEE ANSWER &rarr;</button>
       </div>
     </div>
   </div>
