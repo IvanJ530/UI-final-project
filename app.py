@@ -3,7 +3,7 @@ import json
 from datetime import datetime
 
 app = Flask(__name__)
-app.secret_key = 'cognitive_distortions_hw10'
+app.secret_key = 'cognitive_distortions_final'
 
 # ── Data ─────────────────────────────────────────────────────────────────────
 
