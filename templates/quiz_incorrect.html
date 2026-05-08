@@ -47,8 +47,7 @@
         </div>
       </div>
 
-      <div class="mt-s4 d-flex justify-content-between">
-        <a href="{{ url_for('quiz', question_num=question_num) }}" class="btn-secondary-custom">&larr; Try Again</a>
+      <div class="mt-s4 d-flex justify-content-end">
         {% if question_num < total %}
           <a href="{{ url_for('quiz', question_num=question_num+1) }}" class="btn-primary-custom">CONTINUE &rarr;</a>
         {% else %}
