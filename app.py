@@ -166,8 +166,6 @@ def start():
     session['start_time'] = datetime.now().isoformat()
     session['learn_log'] = {}
     session['practice_log'] = {}
-    session['quiz_answers'] = {}
-    session['quiz_score'] = 0
     session.modified = True
     return redirect(url_for('learn', lesson_num=1))
 
@@ -253,6 +251,9 @@ def practice_reveal(practice_num):
 @app.route('/quiz_intro')
 def quiz_intro():
     init_session()
+    answers = session.get('quiz_answers', {})
+    if len(answers) >= len(QUIZ_QUESTIONS):
+        return redirect(url_for('results'))
     resume = get_quiz_resume()
     if resume:
         return redirect(url_for('quiz', question_num=resume))
@@ -263,6 +264,12 @@ def quiz(question_num):
     init_session()
     if question_num < 1 or question_num > len(QUIZ_QUESTIONS):
         return redirect(url_for('home'))
+    answers = session.get('quiz_answers', {})
+    if str(question_num) in answers:
+        resume = get_quiz_resume()
+        if resume:
+            return redirect(url_for('quiz', question_num=resume))
+        return redirect(url_for('results'))
     q = QUIZ_QUESTIONS[question_num - 1]
     progress = round((question_num / len(QUIZ_QUESTIONS)) * 100)
     return render_template('quiz.html',
@@ -305,6 +312,13 @@ def quiz_submit(question_num):
                                progress=round((question_num / len(QUIZ_QUESTIONS)) * 100),
                                all_quiz=QUIZ_QUESTIONS,
                                quiz_answers=session.get('quiz_answers', {}))
+
+@app.route('/quiz/reset')
+def quiz_reset():
+    session['quiz_answers'] = {}
+    session['quiz_score'] = 0
+    session.modified = True
+    return redirect(url_for('quiz_intro'))
 
 @app.route('/results')
 def results():
