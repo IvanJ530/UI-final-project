@@ -1,4 +1,8 @@
-# Identifying Cognitive Distortions — HW10 Flask App
+# Identifying Cognitive Distortions
+# Team Members
+
+- Silin Jiang — IvanJ530
+- Zirou Liang — zl3694
 
 ## Setup
 
